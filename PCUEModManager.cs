@@ -68,9 +68,6 @@ namespace Pandemonium_Classic___Mod_Manager
 
                 PCUEMOD installer = new(Mods[modListBox.SelectedIndex]);
                 installer.ShowDialog();
-
-                MessageBox.Show(installer.installCount + " files installed.", "PCUEMOD", 
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {

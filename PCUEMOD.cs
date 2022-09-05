@@ -37,9 +37,19 @@ namespace Pandemonium_Classic___Mod_Manager
 
             // Gets the xml document in question to guide the installer
             doc = XDocument.Load(mod.xmlPath);
+
+            var mainPackage = doc.Descendants().Elements("mainpackage").FirstOrDefault();
+            if (mainPackage != null)
+                GetMainPackage(mainPackage);
+
             installSteps = doc.Descendants().Elements("installstep").ToArray();
             stepIndex = 0;
             RunInstallStep(0);
+        }
+        public void GetMainPackage(XElement element)
+        {
+            string folderPath = Path.Combine(Mod.FolderPath, element.Value);
+            fileList.AddRange(Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories).ToArray());
         }
 
         public void RunInstallStep(int index)
@@ -115,14 +125,19 @@ namespace Pandemonium_Classic___Mod_Manager
 
         private void optionListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            int index = optionListBox.SelectedIndex;
-            InstallerOption selected = optionList[index];
-            if (selected != null)
+            if (optionListBox.SelectedIndex >= 0
+                && optionListBox.SelectedIndex < optionListBox.Items.Count
+                && optionListBox.Items.Count != 0)
             {
-                if (selected.Description != null)
-                    optionDescBox.Text = selected.Description;
-                if (selected.Image != null)
-                    optionThumbnailBox.Image = selected.Image;
+                int index = optionListBox.SelectedIndex;
+                InstallerOption selected = optionList[index];
+                if (selected != null)
+                {
+                    if (selected.Description != null)
+                        optionDescBox.Text = selected.Description;
+                    if (selected.Image != null)
+                        optionThumbnailBox.Image = selected.Image;
+                }
             }
         }
 
@@ -177,7 +192,8 @@ namespace Pandemonium_Classic___Mod_Manager
 
         private void ExitPCUEMODInstaller()
         {
-            MessageBox.Show("Done!");
+            MessageBox.Show(installCount + " files installed.", "PCUEMOD",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
             this.Close();
         }
     }
