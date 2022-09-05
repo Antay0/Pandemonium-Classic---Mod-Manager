@@ -1,6 +1,6 @@
 ﻿namespace Pandemonium_Classic___Mod_Manager
 {
-    partial class Form1
+    partial class PCUEModManager
     {
         /// <summary>
         ///  Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PCUEModManager));
             this.installButton = new System.Windows.Forms.Button();
             this.uninstallButton = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
@@ -36,7 +36,7 @@
             this.modThumbnailBox = new System.Windows.Forms.PictureBox();
             this.gameDataFolderInputBox = new System.Windows.Forms.TextBox();
             this.gameFolderFileBrowser = new System.Windows.Forms.Button();
-            this.modList = new System.Windows.Forms.ListBox();
+            this.modListBox = new System.Windows.Forms.ListBox();
             this.modFolderFileBrowser = new System.Windows.Forms.Button();
             this.modFolderInputBox = new System.Windows.Forms.TextBox();
             this.modDescriptionBox = new System.Windows.Forms.TextBox();
@@ -91,12 +91,12 @@
             this.gameFolderFileBrowser.UseVisualStyleBackColor = true;
             this.gameFolderFileBrowser.Click += new System.EventHandler(this.button1_Click);
             // 
-            // modList
+            // modListBox
             // 
-            resources.ApplyResources(this.modList, "modList");
-            this.modList.FormattingEnabled = true;
-            this.modList.Name = "modList";
-            this.modList.SelectedIndexChanged += new System.EventHandler(this.modList_SelectedIndexChanged);
+            resources.ApplyResources(this.modListBox, "modListBox");
+            this.modListBox.FormattingEnabled = true;
+            this.modListBox.Name = "modListBox";
+            this.modListBox.SelectedIndexChanged += new System.EventHandler(this.modListBox_SelectedIndexChanged);
             // 
             // modFolderFileBrowser
             // 
@@ -126,7 +126,7 @@
             this.BackupCheckBox.UseVisualStyleBackColor = true;
             this.BackupCheckBox.CheckedChanged += new System.EventHandler(this.BackupCheckBox_CheckedChanged);
             // 
-            // Form1
+            // PCUEModManager
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -134,7 +134,7 @@
             this.Controls.Add(this.modDescriptionBox);
             this.Controls.Add(this.modFolderFileBrowser);
             this.Controls.Add(this.modFolderInputBox);
-            this.Controls.Add(this.modList);
+            this.Controls.Add(this.modListBox);
             this.Controls.Add(this.gameFolderFileBrowser);
             this.Controls.Add(this.gameDataFolderInputBox);
             this.Controls.Add(this.progressBar1);
@@ -143,7 +143,7 @@
             this.Controls.Add(this.installButton);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
-            this.Name = "Form1";
+            this.Name = "PCUEModManager";
             ((System.ComponentModel.ISupportInitialize)(this.modThumbnailBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -158,7 +158,7 @@
         private PictureBox modThumbnailBox;
         private TextBox gameDataFolderInputBox;
         private Button gameFolderFileBrowser;
-        private ListBox modList;
+        private ListBox modListBox;
         private Button modFolderFileBrowser;
         private TextBox modFolderInputBox;
         private TextBox modDescriptionBox;
