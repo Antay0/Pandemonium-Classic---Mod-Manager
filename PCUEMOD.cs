@@ -23,6 +23,7 @@ namespace Pandemonium_Classic___Mod_Manager
         List<InstallerOption> optionList = new();
 
         public List<string> fileList = new();
+        public int installCount = 0;
 
         public bool selectOne;
         public bool required;
@@ -32,15 +33,23 @@ namespace Pandemonium_Classic___Mod_Manager
             Mod = mod;
             InitializeComponent();
 
+            this.Text = "PCUEMOD Installer: " + Mod.Name;
+
             // Gets the xml document in question to guide the installer
             doc = XDocument.Load(mod.xmlPath);
-            installSteps = doc.Descendants().Elements("installsteps").ToArray();
+            installSteps = doc.Descendants().Elements("installstep").ToArray();
             stepIndex = 0;
             RunInstallStep(0);
         }
 
         public void RunInstallStep(int index)
         {
+            // Reset dialog
+            CleanDialog();
+            selectOne = false;
+            required = false;
+            optionList.Clear();
+
             XElement step = installSteps[index];
             XmlReader reader = step.CreateReader();
 
@@ -48,11 +57,11 @@ namespace Pandemonium_Classic___Mod_Manager
             installStepLabel.Text = reader.GetAttribute("name");
             reader.MoveToElement();
 
-            selectOne = reader.GetAttribute("type") == "SelectOne" ? true : false;
+            selectOne = reader.GetAttribute("onlyone") == "true" ? true : false;
 
-            required = reader.GetAttribute("required") == "required" ? true : false;
+            required = reader.GetAttribute("required") == "true" ? true : false;
 
-            var optionElements = step.Descendants("option"); 
+            var optionElements = step.Descendants("option").ToList();
             foreach(var element in optionElements)
             {
                 var newOption = new InstallerOption();
@@ -85,6 +94,14 @@ namespace Pandemonium_Classic___Mod_Manager
                 string imagePath = Path.Combine(Mod.FolderPath, "PCUEMOD\\images", reader.ReadElementContentAsString());
                  newOption.Image = Image.FromFile(imagePath);
             }
+        }
+
+        public void CleanDialog()
+        {
+            installStepLabel.Text = string.Empty;
+            optionListBox.Items.Clear();
+            optionDescBox.Text = string.Empty;
+            optionThumbnailBox.Image = null;
         }
 
         private void optionListBox_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -147,9 +164,11 @@ namespace Pandemonium_Classic___Mod_Manager
                     }
                     else
                     {
-                        string newPath = Path.Combine(PCUEModManager.gameDataFolder, file.Remove(0, i));
+                        string newPath = Path.Combine(Properties.Settings.Default.gameDataFolder, file.Remove(0, i));
                         Directory.CreateDirectory(newPath.Remove(newPath.LastIndexOf("\\")));
                         File.Copy(file, newPath, true);
+
+                        installCount++;
                     }
                 }
             }

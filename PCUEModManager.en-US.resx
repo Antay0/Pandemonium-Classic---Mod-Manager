@@ -126,11 +126,17 @@
   <data name="BackupCheckBox.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="BackupCheckBox.Enabled" type="System.Boolean, mscorlib">
+    <value>False</value>
+  </data>
   <data name="BackupCheckBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>136, 19</value>
   </data>
   <data name="BackupCheckBox.Text" xml:space="preserve">
     <value>Backup Original Files</value>
+  </data>
+  <data name="BackupCheckBox.Visible" type="System.Boolean, mscorlib">
+    <value>False</value>
   </data>
   <data name="$this.ClientSize" type="System.Drawing.Size, System.Drawing">
     <value>800, 452</value>

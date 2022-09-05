@@ -8,6 +8,9 @@ namespace Pandemonium_Classic___Mod_Manager
         public PCUEModManager()
         {
             InitializeComponent();
+
+            modFolderInputBox.Text = Properties.Settings.Default.modFolder;
+            gameDataFolderInputBox.Text = Properties.Settings.Default.gameDataFolder;
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
@@ -52,17 +55,10 @@ namespace Pandemonium_Classic___Mod_Manager
 
         private void installButton_Click(object sender, EventArgs e)
         {
-            if (!string.IsNullOrEmpty(modFolder)
-                && !string.IsNullOrEmpty(gameDataFolder))
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.modFolder)
+                && !string.IsNullOrEmpty(Properties.Settings.Default.gameDataFolder))
             {
-                int folderCount = 0;
-                int fileCount = 0;
-
                 string mod = Mods[modListBox.SelectedIndex].xmlPath;
-
-                PCUEMOD installer = new(Mods[modListBox.SelectedIndex]);
-                installer.ShowDialog();
-
                 if (string.IsNullOrEmpty(mod))
                 {
                     var result = MessageBox.Show("ERROR: string 'toInstall' is NULL or empty", "FilePathError",
@@ -70,7 +66,11 @@ namespace Pandemonium_Classic___Mod_Manager
                     return;
                 }
 
-                MessageBox.Show(folderCount + " folders(" + fileCount + " files) installed.", "Mod Installer");
+                PCUEMOD installer = new(Mods[modListBox.SelectedIndex]);
+                installer.ShowDialog();
+
+                MessageBox.Show(installer.installCount + " files installed.", "PCUEMOD", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
@@ -100,8 +100,9 @@ namespace Pandemonium_Classic___Mod_Manager
 
         private void modFolderInputBox_TextChanged(object sender, EventArgs e) //Fills modlist when mod directory is changed
         {
-            modFolder = modFolderInputBox.Text;
-            var Files = Directory.GetFiles(modFolder, "mod.xml", SearchOption.AllDirectories);
+            Properties.Settings.Default.modFolder = modFolderInputBox.Text;
+            Properties.Settings.Default.Save();
+            var Files = Directory.GetFiles(Properties.Settings.Default.modFolder, "mod.xml", SearchOption.AllDirectories);
 
             foreach (string file in Files)
             {
@@ -116,20 +117,15 @@ namespace Pandemonium_Classic___Mod_Manager
 
         private void gameDataFolderInputBox_TextChanged(object sender, EventArgs e)
         {
-            gameDataFolder = gameDataFolderInputBox.Text;
+            Properties.Settings.Default.gameDataFolder = gameDataFolderInputBox.Text;
+            Properties.Settings.Default.Save();
         }
-
-        public List<Mod> Mods = new();
-
-        public static string modFolder = string.Empty;
-        public static string gameDataFolder = string.Empty;
-
-        private string backupDir = Path.Combine(Application.StartupPath, "FileBackup");
-        private List<string> backedUpFiles = new();
 
         private void modListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (e != null)
+            if (modListBox.SelectedIndex >= 0 
+                && modListBox.SelectedIndex < modListBox.Items.Count
+                && modListBox.Items.Count != 0)
             {
                 modDescriptionBox.Text = string.Empty;
                 modThumbnailBox.Image = null;
@@ -145,6 +141,11 @@ namespace Pandemonium_Classic___Mod_Manager
                 }
             }
         }
+
+        public List<Mod> Mods = new();
+
+        private string backupDir = Path.Combine(Application.StartupPath, "FileBackup");
+        private List<string> backedUpFiles = new();
     }
 
     public class Mod
