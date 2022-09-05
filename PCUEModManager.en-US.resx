@@ -90,14 +90,14 @@
   <data name="gameFolderFileBrowser.Text" xml:space="preserve">
     <value>...</value>
   </data>
-  <data name="modList.ItemHeight" type="System.Int32, mscorlib">
+  <data name="modListBox.ItemHeight" type="System.Int32, mscorlib">
     <value>15</value>
   </data>
-  <data name="modList.Location" type="System.Drawing.Point, System.Drawing">
-    <value>492, 12</value>
-  </data>
-  <data name="modList.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="modListBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>296, 424</value>
+  </data>
+  <data name="modListBox.TabIndex" type="System.Int32, mscorlib">
+    <value>7</value>
   </data>
   <data name="modFolderFileBrowser.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>

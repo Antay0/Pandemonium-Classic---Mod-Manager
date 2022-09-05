@@ -14,26 +14,28 @@ namespace Pandemonium_Classic___Mod_Manager
 {
     public partial class PCUEMOD : Form
     {
-        public string Modules;
+        public Mod Mod;
 
         XDocument doc;
         XElement[] installSteps;
-        int stepIndex;
+        int stepIndex; 
+        
+        List<InstallerOption> optionList = new();
 
         public List<string> fileList = new();
 
         public bool selectOne;
+        public bool required;
 
-        List<List<string>> optionFileLists = new();
-
-        public PCUEMOD(string modules)
+        public PCUEMOD(Mod mod)
         {
-            Modules = modules;
+            Mod = mod;
             InitializeComponent();
 
             // Gets the xml document in question to guide the installer
-            doc = XDocument.Load(Modules);
+            doc = XDocument.Load(mod.xmlPath);
             installSteps = doc.Descendants().Elements("installsteps").ToArray();
+            stepIndex = 0;
             RunInstallStep(0);
         }
 
@@ -42,31 +44,46 @@ namespace Pandemonium_Classic___Mod_Manager
             XElement step = installSteps[index];
             XmlReader reader = step.CreateReader();
 
+            reader.ReadToFollowing("installstep");
             installStepLabel.Text = reader.GetAttribute("name");
             reader.MoveToElement();
 
-            reader.GetAttribute("type");
-            selectOne = reader.Value == "SelectOne" ? true : false;
+            selectOne = reader.GetAttribute("type") == "SelectOne" ? true : false;
 
-            var options = step.Descendants("option");
-            foreach(var option in options)
+            required = reader.GetAttribute("required") == "required" ? true : false;
+
+            var optionElements = step.Descendants("option"); 
+            foreach(var element in optionElements)
             {
-                reader = option.CreateReader();
+                var newOption = new InstallerOption();
+
+                reader = element.CreateReader();
+                reader.ReadToFollowing("option");
                 string? label = reader.GetAttribute("name");
                 if (label != null)
+                {
+                    newOption.Name = label;
                     optionListBox.Items.Add(label);
+                    optionList.Add(newOption);
+                }
                 else
+                {
+                    MessageBox.Show("option name is null", "Error", 
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
+                }
                 
                 reader.MoveToElement();
                 reader.ReadToDescendant("description");
-                optionDescBox.Text = reader.Value;
-                
-                reader.Read(); // Reads to image folder path
-                optionFileLists.Add(Directory.GetFiles(reader.Value, "*", SearchOption.AllDirectories).ToList());
+                newOption.Description = reader.ReadElementContentAsString();
 
-                reader.Read(); // Reads to option image path
-                optionImageBox.Image = Image.FromFile(reader.Value);
+                // Get value from <folder> element
+                string folderPath = Path.Combine(Mod.FolderPath, reader.ReadElementContentAsString());
+                newOption.Files = Directory.GetFiles(folderPath, "*", SearchOption.AllDirectories).ToList();
+
+                // Get value from <image> element
+                string imagePath = Path.Combine(Mod.FolderPath, "PCUEMOD\\images", reader.ReadElementContentAsString());
+                 newOption.Image = Image.FromFile(imagePath);
             }
         }
 
@@ -75,22 +92,40 @@ namespace Pandemonium_Classic___Mod_Manager
             if (selectOne)
             {
                 for (int i = 0; i < optionListBox.Items.Count; i++)
-                    optionListBox.SetItemChecked(i, false);
+                    if (i != e.Index) optionListBox.SetItemCheckState(i, CheckState.Unchecked);
+            }
+        }
 
-                optionListBox.SetItemChecked(e.Index, true);
+        private void optionListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int index = optionListBox.SelectedIndex;
+            InstallerOption selected = optionList[index];
+            if (selected != null)
+            {
+                if (selected.Description != null)
+                    optionDescBox.Text = selected.Description;
+                if (selected.Image != null)
+                    optionThumbnailBox.Image = selected.Image;
             }
         }
 
         private void nextButton_Click(object sender, EventArgs e)
         {
-            // Add selected file packs to list of files to install
-            foreach (int index in optionListBox.CheckedItems)
-                fileList.AddRange(optionFileLists[index]);
+            if (!required || optionListBox.CheckedItems.Count != 0)
+            {
+                // Add selected file packs to list of files to install
+                foreach (int index in optionListBox.CheckedIndices)
+                    fileList.AddRange(optionList[index].Files);
 
-            stepIndex++;
-            if (stepIndex < installSteps.Length)
-                RunInstallStep(stepIndex);
-            else InstallFiles();
+                if (stepIndex < installSteps.Length - 1)
+                {
+                    stepIndex++;
+                    RunInstallStep(stepIndex);
+                }
+                else InstallFiles();
+            }
+            else MessageBox.Show("This step requires at least one box to be checked!", "Required Segment", 
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void InstallFiles()
@@ -101,7 +136,7 @@ namespace Pandemonium_Classic___Mod_Manager
             {
                 foreach (var file in fileList)
                 {
-                    int i = file.IndexOf("\\StreamingAssets");
+                    int i = file.IndexOf("StreamingAssets");
                     if (i == -1)
                     {
                         // If the indicated substring isn't found, ask whether to continue or exit the installation
@@ -112,7 +147,8 @@ namespace Pandemonium_Classic___Mod_Manager
                     }
                     else
                     {
-                        string newPath = Path.Combine(Form1.gameDataFolder, file.Remove(0, i));
+                        string newPath = Path.Combine(PCUEModManager.gameDataFolder, file.Remove(0, i));
+                        Directory.CreateDirectory(newPath.Remove(newPath.LastIndexOf("\\")));
                         File.Copy(file, newPath, true);
                     }
                 }
@@ -125,5 +161,13 @@ namespace Pandemonium_Classic___Mod_Manager
             MessageBox.Show("Done!");
             this.Close();
         }
+    }
+
+    public class InstallerOption
+    {
+        public string? Name;
+        public string? Description;
+        public List<string> Files = new();
+        public Image? Image;
     }
 }

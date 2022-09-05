@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.optionListBox = new System.Windows.Forms.CheckedListBox();
-            this.optionImageBox = new System.Windows.Forms.PictureBox();
+            this.optionThumbnailBox = new System.Windows.Forms.PictureBox();
             this.installStepLabel = new System.Windows.Forms.Label();
             this.nextButton = new System.Windows.Forms.Button();
             this.optionDescBox = new System.Windows.Forms.TextBox();
-            ((System.ComponentModel.ISupportInitialize)(this.optionImageBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.optionThumbnailBox)).BeginInit();
             this.SuspendLayout();
             // 
             // optionListBox
@@ -45,15 +45,17 @@
             this.optionListBox.Size = new System.Drawing.Size(241, 344);
             this.optionListBox.TabIndex = 0;
             this.optionListBox.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.optionListBox_ItemCheck);
+            this.optionListBox.SelectedIndexChanged += new System.EventHandler(this.optionListBox_SelectedIndexChanged);
             // 
-            // optionImageBox
+            // optionThumbnailBox
             // 
-            this.optionImageBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.optionImageBox.Location = new System.Drawing.Point(12, 12);
-            this.optionImageBox.Name = "optionImageBox";
-            this.optionImageBox.Size = new System.Drawing.Size(348, 232);
-            this.optionImageBox.TabIndex = 1;
-            this.optionImageBox.TabStop = false;
+            this.optionThumbnailBox.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.optionThumbnailBox.Location = new System.Drawing.Point(12, 12);
+            this.optionThumbnailBox.Name = "optionThumbnailBox";
+            this.optionThumbnailBox.Size = new System.Drawing.Size(348, 232);
+            this.optionThumbnailBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.optionThumbnailBox.TabIndex = 1;
+            this.optionThumbnailBox.TabStop = false;
             // 
             // installStepLabel
             // 
@@ -65,7 +67,7 @@
             this.installStepLabel.Size = new System.Drawing.Size(241, 37);
             this.installStepLabel.TabIndex = 2;
             this.installStepLabel.Text = "Step Label";
-            this.installStepLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.installStepLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // nextButton
             // 
@@ -84,6 +86,7 @@
             this.optionDescBox.Multiline = true;
             this.optionDescBox.Name = "optionDescBox";
             this.optionDescBox.PlaceholderText = "Option Description";
+            this.optionDescBox.ReadOnly = true;
             this.optionDescBox.Size = new System.Drawing.Size(348, 199);
             this.optionDescBox.TabIndex = 4;
             // 
@@ -95,11 +98,11 @@
             this.Controls.Add(this.optionDescBox);
             this.Controls.Add(this.nextButton);
             this.Controls.Add(this.installStepLabel);
-            this.Controls.Add(this.optionImageBox);
+            this.Controls.Add(this.optionThumbnailBox);
             this.Controls.Add(this.optionListBox);
             this.Name = "PCUEMOD";
-            this.Text = "Form2";
-            ((System.ComponentModel.ISupportInitialize)(this.optionImageBox)).EndInit();
+            this.Text = "PCUEMOD Installer";
+            ((System.ComponentModel.ISupportInitialize)(this.optionThumbnailBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -107,7 +110,7 @@
 
         #endregion
         private CheckedListBox optionListBox;
-        private PictureBox optionImageBox;
+        private PictureBox optionThumbnailBox;
         private Label installStepLabel;
         private Button nextButton;
         private TextBox optionDescBox;
