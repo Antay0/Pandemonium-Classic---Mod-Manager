@@ -1,11 +1,19 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml;
+
 namespace Pandemonium_Classic___Mod_Manager
 {
-    using System.Xml;
-    using System.Diagnostics;
-
-    public partial class PCUEModManager : Form
+    public partial class PCUE_ModManager : Form
     {
-        public PCUEModManager()
+        public PCUE_ModManager()
         {
             InitializeComponent();
 
@@ -90,24 +98,24 @@ namespace Pandemonium_Classic___Mod_Manager
             }
         }
 
-        private void BackupCheckBox_CheckedChanged(object sender, EventArgs e)
-        {
-            uninstallButton.Visible = BackupCheckBox.Checked;
-        }
-
         private void modFolderInputBox_TextChanged(object sender, EventArgs e) //Fills modlist when mod directory is changed
         {
             Properties.Settings.Default.modFolder = modFolderInputBox.Text;
             Properties.Settings.Default.Save();
-            var Files = Directory.GetFiles(Properties.Settings.Default.modFolder, "mod.xml", SearchOption.AllDirectories);
-
-            foreach (string file in Files)
+            if (!string.IsNullOrEmpty(Properties.Settings.Default.modFolder))
             {
-                Mod mod = new(file);
-                if (mod.Name != null)
+                if (Directory.Exists(Properties.Settings.Default.modFolder))
                 {
-                    Mods.Add(mod);
-                    modListBox.Items.Add(mod.Name);
+                    var Files = Directory.GetFiles(Properties.Settings.Default.modFolder, "mod.xml", SearchOption.AllDirectories);
+                    foreach (string file in Files)
+                    {
+                        Mod mod = new(file);
+                        if (mod.Name != null)
+                        {
+                            Mods.Add(mod);
+                            modListBox.Items.Add(mod.Name);
+                        }
+                    }
                 }
             }
         }
@@ -120,7 +128,7 @@ namespace Pandemonium_Classic___Mod_Manager
 
         private void modListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (modListBox.SelectedIndex >= 0 
+            if (modListBox.SelectedIndex >= 0
                 && modListBox.SelectedIndex < modListBox.Items.Count
                 && modListBox.Items.Count != 0)
             {
@@ -143,6 +151,7 @@ namespace Pandemonium_Classic___Mod_Manager
 
         private string backupDir = Path.Combine(Application.StartupPath, "FileBackup");
         private List<string> backedUpFiles = new();
+
     }
 
     public class Mod
@@ -153,7 +162,7 @@ namespace Pandemonium_Classic___Mod_Manager
         public string FolderPath; // Path to base folder that contains all other components of the mod.
         public string xmlPath; // Path to mod.xml
 
-        public Mod (string filePath)
+        public Mod(string filePath)
         {
             FolderPath = filePath.Replace("PCUEMOD\\mod.xml", "");
             xmlPath = filePath;

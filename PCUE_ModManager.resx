@@ -57,43 +57,4 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="installButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>376, 389</value>
-  </data>
-  <data name="uninstallButton.Location" type="System.Drawing.Point, System.Drawing">
-    <value>376, 336</value>
-  </data>
-  <data name="progressBar1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>249, 256</value>
-  </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="pictureBox1.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
-    <value>NoControl</value>
-  </data>
-  <data name="pictureBox1.Location" type="System.Drawing.Point, System.Drawing">
-    <value>249, 0</value>
-  </data>
-  <data name="gameFolder.Size" type="System.Drawing.Size, System.Drawing">
-    <value>289, 23</value>
-  </data>
-  <data name="gameFolderFileBrowser.AutoSizeMode" type="System.Windows.Forms.AutoSizeMode, System.Windows.Forms">
-    <value>GrowAndShrink</value>
-  </data>
-  <data name="gameFolderFileBrowser.Size" type="System.Drawing.Size, System.Drawing">
-    <value>25, 23</value>
-  </data>
-  <data name="gameFolderFileBrowser.Text" xml:space="preserve">
-    <value>...</value>
-  </data>
-  <data name="modList.Dock" type="System.Windows.Forms.DockStyle, System.Windows.Forms">
-    <value>Right</value>
-  </data>
-  <assembly alias="mscorlib" name="mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="modList.ItemHeight" type="System.Int32, mscorlib">
-    <value>15</value>
-  </data>
-  <data name="modList.Size" type="System.Drawing.Size, System.Drawing">
-    <value>295, 450</value>
-  </data>
 </root>
